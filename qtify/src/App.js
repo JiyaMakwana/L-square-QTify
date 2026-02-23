@@ -2,6 +2,7 @@
 import './App.css';
 // import {Routes,Route,Link} from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
+import Hero from "./components/Hero/Hero";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Route path="/" element={<Navbar />} />
       </Routes> */}
       <Navbar />
+      <Hero/>
     </div>
   );
 }
