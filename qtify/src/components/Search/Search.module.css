@@ -1,48 +1,72 @@
-.wrapper {
-  display: flex;
-  align-items: stretch;
-  height: 48px;
-}
-
-.search {
-  height: 100%;
-  padding: 0 20px;           
-  border: 1px solid var(--black);
-  border-right: none;
-  border-radius: 8px 0 0 8px;
+.searchWrapper {
+  position: relative;
   width: 500px;
-  outline: none;
-  font-family: "Poppins", sans-serif;
-  box-sizing: border-box;   
 }
 
-
-
-.searchButton {
-  height: 100%;
-  padding: 0 18px;      
-  border: 1px solid var(--black);
-  border-radius: 0 8px 8px 0;
-  background-color: white;
-  cursor: pointer;
+.inputContainer {
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.listElement {
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.inputContainer input {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  outline: none;
 }
 
-.albumTitle {
-  font-size: 16px;
+.icon {
+  margin-right: 10px;
 }
 
-.albumArtists {
+.dropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background: #121212;
+  border-radius: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+  z-index: 999;
+}
+
+.resultItem {
+  padding: 12px;
+  border-bottom: 1px solid #1f1f1f;
+  cursor: pointer;
+  color: white;
+}
+
+.resultItem:hover {
+  background: #1e1e1e;
+}
+
+.resultItem strong {
+  display: block;
+}
+
+.resultItem p {
   font-size: 12px;
-  color: #b3b3b3;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+.resultItem:hover {
+  background: linear-gradient(to right, #2f80ed, #56ccf2);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .searchWrapper {
+    width: 100%;
+  }
+
+  .dropdown {
+    width: 100%;
+  }
 }

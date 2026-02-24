@@ -1,42 +1,67 @@
-import React, { useEffect, useState ,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Card from "../Card/Card";
 import styles from "./Section.module.css";
 
-export default function Section({ title, endpoint ,data: externalData,
+export default function Section({
+  title,
+  endpoint,
+  data: externalData,
   type = "album",
   showToggle = true,
-  children }){
+  children,
+  setCurrentSong
+}) {
   const [data, setData] = useState([]);
-  const rowRef = useRef(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const rowRef = useRef(null);
 
+  // 🔹 Fetch from endpoint (Albums mode)
   useEffect(() => {
-  if (endpoint) {
-    axios.get(endpoint).then((res) => {
-      setData(res.data);
-    });
-    }
+    if (!endpoint) return;
+
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(endpoint);
+        setData(res.data);
+      } catch (err) {
+        console.error("Error fetching section data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [endpoint]);
 
+  // 🔹 Use external data (Songs mode)
   useEffect(() => {
     if (externalData) {
       setData(externalData);
     }
   }, [externalData]);
 
+  // 🔹 Safe scroll functions
   const scrollLeft = () => {
-    rowRef.current.scrollBy({ left: -300, behavior: "smooth" });
+    if (rowRef.current) {
+      rowRef.current.scrollBy({ left: -300, behavior: "smooth" });
+    }
   };
 
   const scrollRight = () => {
-    rowRef.current.scrollBy({ left: 300, behavior: "smooth" });
+    if (rowRef.current) {
+      rowRef.current.scrollBy({ left: 300, behavior: "smooth" });
+    }
   };
 
   return (
     <div className={styles.section}>
+      {/* Header */}
       <div className={styles.header}>
         <h2>{title}</h2>
+
         {showToggle && (
           <button
             className={styles.toggle}
@@ -46,21 +71,36 @@ export default function Section({ title, endpoint ,data: externalData,
           </button>
         )}
       </div>
+
+      {/* Tabs if any (Songs) */}
       {children}
 
-      {isCollapsed ? (
+      {/* Loading */}
+      {loading ? (
+        <p style={{ color: "white" }}>Loading...</p>
+      ) : isCollapsed ? (
+        // Grid View
         <div className={styles.grid}>
           {data.map((item) => (
             <Card
-              key={item.id}
-              image={item.image}
-              title={item.title}
-              follows={type === "song" ? item.likes : item.follows}
-              type={type}
-            />
+                key={item.id}
+                image={item.image}
+                title={item.title}
+                follows={type === "song" ? item.likes : item.follows}
+                type={type}
+                album={item}
+                id={item.id}
+                song={item}
+                onClick={() => {
+                  if (type === "song" && setCurrentSong) {
+                    setCurrentSong(item);
+                  }
+                }}
+              />
           ))}
         </div>
       ) : (
+        // Carousel View
         <div className={styles.sliderWrapper}>
           <button className={styles.arrowLeft} onClick={scrollLeft}>
             ❮
@@ -74,6 +114,14 @@ export default function Section({ title, endpoint ,data: externalData,
                 title={item.title}
                 follows={type === "song" ? item.likes : item.follows}
                 type={type}
+                album={item}
+                id={item.id}
+                song={item}
+                onClick={() => {
+                  if (type === "song" && setCurrentSong) {
+                    setCurrentSong(item);
+                  }
+                }}
               />
             ))}
           </div>

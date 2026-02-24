@@ -1,116 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Search.module.css";
-import { ReactComponent as SearchIcon } from "../../assets/search-icon.svg";
-import { useAutocomplete } from "@mui/material";
-import { styled } from "@mui/system";
-import { truncate } from "../../helpers/helpers";
-import { useNavigate } from "react-router-dom";
-// import { Tooltip } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
-const Listbox = styled("ul")(({ theme }) => ({
-  width: "100%",
-  margin: 0,
-  padding: 0,
-  position: "absolute",
-  borderRadius: "0px 0px 10px 10px",
-  border: "1px solid var(--black)",
-  top: 60,
-  height: "max-content",
-  maxHeight: "500px",
-  zIndex: 10,
-  overflowY: "scroll",
-  left: 0,
-  bottom: 0,
-  right: 0,
-  listStyle: "none",
-  backgroundColor: "var(--green)",
-  overflow: "auto",
-  "& li.Mui-focused": {
-    backgroundColor: "#4a8df6",
-    color: "white",
-    cursor: "pointer",
-  },
-  "& li:active": {
-    backgroundColor: "#2977f5",
-    color: "white",
-  },
-}));
+export default function Search({ placeholder, searchData = [] }) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
 
-function Search({ searchData, placeholder }) {
-  const {
-    getRootProps,
-    // getInputLabelProps,
-    value,
-    getInputProps,
-    getListboxProps,
-    getOptionProps,
-    groupedOptions,
-  } = useAutocomplete({
-    id: "use-autocomplete-demo",
-    options: searchData || [],
-    getOptionLabel: (option) => option.title,
-  });
+  useEffect(() => {
+    if (!query) {
+      setResults([]);
+      return;
+    }
 
-  const navigate = useNavigate();
-  const onSubmit = (e, value) => {
-    e.preventDefault();
-    console.log(value);
-    navigate(`/album/${value.slug}`);
-    //Process form data, call API, set state etc.
-  };
+    const filtered = searchData.filter((item) =>
+      item.title.toLowerCase().includes(query.toLowerCase())
+    );
+
+    setResults(filtered);
+  }, [query, searchData]);
 
   return (
-    <div style={{ position: "relative" }}>
-      <form
-        className={styles.wrapper}
-        onSubmit={(e) => {
-          onSubmit(e, value);
-        }}
-      >
-        <div {...getRootProps()}>
-          <input
-            name="album"
-            className={styles.search}
-            placeholder={placeholder}
-            required
-            {...getInputProps()}
-          />
-        </div>
-        <div>
-          <button className={styles.searchButton} type="submit">
-            <SearchIcon />
-          </button>
-        </div>
-      </form>
-      {groupedOptions.length > 0 ? (
-        <Listbox {...getListboxProps()}>
-          {groupedOptions.map((option, index) => {
-            // console.log(option);
-            const artists = option.songs.reduce((accumulator, currentValue) => {
-              accumulator.push(...currentValue.artists);
-              return accumulator;
-            }, []);
+    <div className={styles.searchWrapper}>
+      <div className={styles.inputContainer}>
+        <input
+          type="text"
+          placeholder={placeholder}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <SearchIcon className={styles.icon} />
+      </div>
 
-            return (
-              <li
-              key={option.slug}
-                className={styles.listElement}
-                {...getOptionProps({ option, index })}
-              >
-                <div>
-                  <p className={styles.albumTitle}>{option.title}</p>
-
-                  <p className={styles.albumArtists}>
-                    {truncate(artists.join(", "), 40)}
-                  </p>
-                </div>
-              </li>
-            );
-          })}
-        </Listbox>
-      ) : null}
+      {results.length > 0 && (
+        <div className={styles.dropdown}>
+          {results.map((item) => (
+            <div key={item.id} className={styles.resultItem}>
+              <div>
+                <strong>{item.title}</strong>
+                <p>{item.artists?.join(", ")}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
-
-export default Search;

@@ -71,3 +71,18 @@
 .arrowRight {
   right: -20px;
 }
+
+@media (max-width: 768px) {
+  .section {
+    padding: 20px;
+  }
+
+  .row {
+    gap: 10px;
+  }
+
+  .arrowLeft,
+  .arrowRight {
+    display: none; /* Hide arrows on mobile */
+  }
+}

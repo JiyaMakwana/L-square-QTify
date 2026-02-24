@@ -1,0 +1,136 @@
+.container {
+  background-color: #121212;
+  color: white;
+  padding: 40px 80px;
+  min-height: 100vh;
+}
+
+.back {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.header {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.header img {
+  width: 200px;
+  border-radius: 12px;
+}
+
+.details h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.meta {
+  margin-top: 10px;
+  color: #aaa;
+}
+
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.shuffle {
+  background: #34C94B;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.library {
+  background: transparent;
+  border: 1px solid #34C94B;
+  color: #34C94B;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #1f1f1f;
+  align-items: center;
+}
+
+.songInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.songInfo img {
+  width: 40px;
+  border-radius: 6px;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  gap: 8px;
+}
+
+.pagination button {
+  background: transparent;
+  border: 1px solid #34C94B;
+  color: #34C94B;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.active {
+  background: #34C94B;
+  color: black;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header img {
+    width: 180px;
+  }
+
+  .tableHeader {
+    display: none; /* hide table header on mobile */
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .pagination {
+    justify-content: center;
+  }
+}

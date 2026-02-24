@@ -8,3 +8,16 @@
   gap: 30px;
   color:#ffffff;
 }
+
+@media (max-width: 768px) {
+  .heroContainer {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .heroImage {
+    width: 200px;
+    margin-top: 20px;
+  }
+}
