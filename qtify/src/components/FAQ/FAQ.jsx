@@ -5,7 +5,7 @@ import {
   AccordionDetails,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import styles from "./FAQ.module.css";
+// import styles from "./FAQ.module.css";
 
 export default function FAQ() {
   const [faqs, setFaqs] = useState([]);
