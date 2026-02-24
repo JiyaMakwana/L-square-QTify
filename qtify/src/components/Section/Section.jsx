@@ -3,16 +3,27 @@ import axios from "axios";
 import Card from "../Card/Card";
 import styles from "./Section.module.css";
 
-export default function Section({ title, endpoint }){
+export default function Section({ title, endpoint ,data: externalData,
+  type = "album",
+  showToggle = true,
+  children }){
   const [data, setData] = useState([]);
   const rowRef = useRef(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
+  if (endpoint) {
     axios.get(endpoint).then((res) => {
       setData(res.data);
     });
+    }
   }, [endpoint]);
+
+  useEffect(() => {
+    if (externalData) {
+      setData(externalData);
+    }
+  }, [externalData]);
 
   const scrollLeft = () => {
     rowRef.current.scrollBy({ left: -300, behavior: "smooth" });
@@ -26,13 +37,16 @@ export default function Section({ title, endpoint }){
     <div className={styles.section}>
       <div className={styles.header}>
         <h2>{title}</h2>
-        <button
-          className={styles.toggle}
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        >
-          {isCollapsed ? "Collapse" : "Show all"}
-        </button>
+        {showToggle && (
+          <button
+            className={styles.toggle}
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          >
+            {isCollapsed ? "Collapse" : "Show all"}
+          </button>
+        )}
       </div>
+      {children}
 
       {isCollapsed ? (
         <div className={styles.grid}>
@@ -41,7 +55,8 @@ export default function Section({ title, endpoint }){
               key={item.id}
               image={item.image}
               title={item.title}
-              follows={item.follows}
+              follows={type === "song" ? item.likes : item.follows}
+              type={type}
             />
           ))}
         </div>
@@ -57,7 +72,8 @@ export default function Section({ title, endpoint }){
                 key={item.id}
                 image={item.image}
                 title={item.title}
-                follows={item.follows}
+                follows={type === "song" ? item.likes : item.follows}
+                type={type}
               />
             ))}
           </div>
